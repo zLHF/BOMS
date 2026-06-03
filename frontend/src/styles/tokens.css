@@ -1,0 +1,29 @@
+/* 设计 token 单一源头 —— 抽自高保真 styles.css :root（与 01-设计系统规范 对齐） */
+:root {
+  --bg: #f5f7fb;
+  --card: #fff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: #e6ebf2;
+  --blue: #2563eb;   /* Element Plus 主色对齐 */
+  --blue2: #0ea5e9;
+  --green: #16a34a;
+  --cyan: #14b8a6;
+  --orange: #f97316;
+  --red: #ef4444;
+  --purple: #7c3aed;
+  --shadow: 0 12px 32px rgba(15, 23, 42, .08);
+  --radius: 18px;
+}
+
+/* Element Plus 主色覆盖为品牌蓝 */
+:root {
+  --el-color-primary: #2563eb;
+  --el-color-primary-light-3: #5b8def;
+  --el-color-primary-light-5: #8fb2f4;
+  --el-color-primary-light-7: #c2d6f9;
+  --el-color-primary-light-8: #d8e4fb;
+  --el-color-primary-light-9: #eff4fe;
+  --el-color-primary-dark-2: #1d4ed8;
+  --el-border-radius-base: 12px;
+}

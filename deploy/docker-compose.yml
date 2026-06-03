@@ -1,0 +1,52 @@
+# BOMS 阶段 0 基础设施 —— 与本机其他项目（如 yunqian-mysql-1）完全隔离
+# MySQL 走 3307，避免和 3306 上已有实例冲突。
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: boms-mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+08:00
+    environment:
+      MYSQL_ROOT_PASSWORD: boms_root_pw
+      MYSQL_DATABASE: boms
+      MYSQL_USER: boms
+      MYSQL_PASSWORD: boms_pw
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - boms_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pboms_root_pw"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: boms-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6380:6379"
+    volumes:
+      - boms_redis_data:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: boms-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: boms
+      MINIO_ROOT_PASSWORD: boms_minio_pw
+    ports:
+      - "9100:9000"   # S3 API
+      - "9101:9001"   # 控制台
+    volumes:
+      - boms_minio_data:/data
+
+volumes:
+  boms_mysql_data:
+  boms_redis_data:
+  boms_minio_data:

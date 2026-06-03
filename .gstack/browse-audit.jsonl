@@ -1,0 +1,57 @@
+{"ts":"2026-06-02T09:17:27.994Z","cmd":"goto","args":"http://localhost:5173/","origin":"http://localhost:5173/","durationMs":188,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:17:28.332Z","cmd":"screenshot","args":"/tmp/boms-current.png","origin":"http://localhost:5173/login","durationMs":239,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:18:32.573Z","cmd":"goto","args":"http://localhost:5174/","origin":"http://localhost:5174/","durationMs":141,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:18:32.730Z","cmd":"screenshot","args":"/tmp/boms-5174.png","origin":"http://localhost:5174/","durationMs":69,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:19:10.699Z","cmd":"goto","args":"http://localhost:5174/","origin":"http://localhost:5174/","durationMs":30,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:19:10.861Z","cmd":"screenshot","args":"/tmp/boms-fixed.png","origin":"http://localhost:5174/","durationMs":76,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:19:56.221Z","cmd":"goto","args":"http://localhost:5174/","origin":"http://localhost:5174/","durationMs":24,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:19:56.376Z","cmd":"screenshot","args":"/tmp/boms-final.png","origin":"http://localhost:5174/","durationMs":67,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:10.081Z","cmd":"goto","args":"http://localhost:5174/","origin":"http://localhost:5174/","durationMs":679,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:11.547Z","cmd":"screenshot","args":"/tmp/boms-login.png","origin":"http://localhost:5174/login?redirect=/dashboard","durationMs":328,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:11.685Z","cmd":"is","args":"visible .login-card","origin":"http://localhost:5174/login?redirect=/dashboard","durationMs":17,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:11.790Z","cmd":"text","args":"","origin":"http://localhost:5174/login?redirect=/dashboard","durationMs":2,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:26.479Z","cmd":"viewport","args":"1440x900","origin":"http://localhost:5174/login?redirect=/dashboard","durationMs":8,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:26.657Z","cmd":"goto","args":"http://localhost:5174/","origin":"http://localhost:5174/","durationMs":74,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:27.873Z","cmd":"click","args":".login-card .el-button--primary","origin":"http://localhost:5174/login?redirect=/dashboard","durationMs":97,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:29.996Z","cmd":"url","args":"","origin":"http://localhost:5174/dashboard","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:30.098Z","cmd":"is","args":"visible .sidebar","origin":"http://localhost:5174/dashboard","durationMs":2,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:30.208Z","cmd":"is","args":"visible .kpi-grid","origin":"http://localhost:5174/dashboard","durationMs":3,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:30.339Z","cmd":"text","args":"","origin":"http://localhost:5174/dashboard","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:30.538Z","cmd":"screenshot","args":"/tmp/boms-dashboard.png","origin":"http://localhost:5174/dashboard","durationMs":94,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:53.356Z","cmd":"js","args":"localStorage.clear()","origin":"http://localhost:5174/dashboard","durationMs":3,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:53.546Z","cmd":"goto","args":"http://localhost:5174/login","origin":"http://localhost:5174/login","durationMs":75,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:54.664Z","cmd":"fill","args":".login-card .el-input__inner ","origin":"http://localhost:5174/login","durationMs":1,"status":"error","hasCookies":false,"mode":"launched","error":"Usage: browse fill <selector> <value>"}
+{"ts":"2026-06-03T01:37:54.768Z","cmd":"js","args":"(()=>{const i=document.querySelectorAll('.login-card input'); i[0].value='';})()","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:37:54.899Z","cmd":"snapshot","args":"-i","origin":"http://localhost:5174/login","durationMs":38,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:09.681Z","cmd":"fill","args":"@e1 ","origin":"http://localhost:5174/login","durationMs":0,"status":"error","hasCookies":false,"mode":"launched","error":"Usage: browse fill <selector> <value>"}
+{"ts":"2026-06-03T01:38:09.793Z","cmd":"fill","args":"@e2 platform_admin","origin":"http://localhost:5174/login","durationMs":19,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:09.945Z","cmd":"fill","args":"@e3 123456","origin":"http://localhost:5174/login","durationMs":27,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:10.105Z","cmd":"click","args":"@e4","origin":"http://localhost:5174/login","durationMs":48,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:12.217Z","cmd":"url","args":"","origin":"http://localhost:5174/login","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:12.313Z","cmd":"js","args":"Array.from(document.querySelectorAll('.nav-title, .nav-item')).map(e=>e.textContent.trim()).join(' | ')","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:12.653Z","cmd":"screenshot","args":"/tmp/boms-platform.png","origin":"http://localhost:5174/login","durationMs":246,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:25.392Z","cmd":"js","args":"Array.from(document.querySelectorAll('.login-card input')).map(i=>i.value).join(' | ')","origin":"http://localhost:5174/login","durationMs":2,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:25.491Z","cmd":"console","args":"--errors","origin":"http://localhost:5174/login","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:33.265Z","cmd":"console","args":"","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:33.386Z","cmd":"click","args":"@e4","origin":"http://localhost:5174/login","durationMs":26,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:35.506Z","cmd":"url","args":"","origin":"http://localhost:5174/login","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:38:35.608Z","cmd":"network","args":"","origin":"http://localhost:5174/login","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:22.110Z","cmd":"js","args":"localStorage.clear()","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:22.306Z","cmd":"goto","args":"http://localhost:5174/login","origin":"http://localhost:5174/login","durationMs":71,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:23.438Z","cmd":"click","args":"@e1","origin":"http://localhost:5174/login","durationMs":0,"status":"error","hasCookies":false,"mode":"launched","error":"Ref @e1 not found. Run 'snapshot' to get fresh refs."}
+{"ts":"2026-06-03T01:39:23.551Z","cmd":"press","args":"Meta+A","origin":"http://localhost:5174/login","durationMs":5,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:23.664Z","cmd":"press","args":"Backspace","origin":"http://localhost:5174/login","durationMs":2,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:23.798Z","cmd":"fill","args":"@e2 platform_admin","origin":"http://localhost:5174/login","durationMs":0,"status":"error","hasCookies":false,"mode":"launched","error":"Ref @e2 not found. Run 'snapshot' to get fresh refs."}
+{"ts":"2026-06-03T01:39:23.894Z","cmd":"fill","args":"@e3 123456","origin":"http://localhost:5174/login","durationMs":0,"status":"error","hasCookies":false,"mode":"launched","error":"Ref @e3 not found. Run 'snapshot' to get fresh refs."}
+{"ts":"2026-06-03T01:39:24.008Z","cmd":"js","args":"Array.from(document.querySelectorAll('.login-card input')).map(i=>i.value||'∅').join(' | ')","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:24.111Z","cmd":"click","args":"@e4","origin":"http://localhost:5174/login","durationMs":0,"status":"error","hasCookies":false,"mode":"launched","error":"Ref @e4 not found. Run 'snapshot' to get fresh refs."}
+{"ts":"2026-06-03T01:39:26.218Z","cmd":"url","args":"","origin":"http://localhost:5174/login","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:26.327Z","cmd":"js","args":"Array.from(document.querySelectorAll('.nav-title, .nav-item')).map(e=>e.textContent.trim()).join(' | ')","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:26.699Z","cmd":"screenshot","args":"/tmp/boms-platform.png","origin":"http://localhost:5174/login","durationMs":264,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:39.992Z","cmd":"snapshot","args":"-i","origin":"http://localhost:5174/login","durationMs":13,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:40.109Z","cmd":"js","args":"(()=>{const ins=document.querySelectorAll('.login-card input'); ['','platform_admin','123456'].forEach((v,idx)=>{const i=ins[idx]; const setter=Object.getOwnPropertyDescriptor(window.HTMLInputElement.…","origin":"http://localhost:5174/login","durationMs":3,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:41.228Z","cmd":"js","args":"Array.from(document.querySelectorAll('.login-card input')).map(i=>i.value||'∅').join(' | ')","origin":"http://localhost:5174/login","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:41.374Z","cmd":"click","args":".login-card .el-button--primary","origin":"http://localhost:5174/login","durationMs":31,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:43.488Z","cmd":"url","args":"","origin":"http://localhost:5174/dashboard","durationMs":0,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:43.589Z","cmd":"js","args":"Array.from(document.querySelectorAll('.nav-title, .nav-item')).map(e=>e.textContent.trim()).join(' | ')","origin":"http://localhost:5174/dashboard","durationMs":1,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-03T01:39:43.786Z","cmd":"screenshot","args":"/tmp/boms-platform.png","origin":"http://localhost:5174/dashboard","durationMs":90,"status":"ok","hasCookies":false,"mode":"launched"}

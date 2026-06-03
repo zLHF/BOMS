@@ -1,0 +1,2 @@
+{"ts":"2026-06-02T09:31:28.378Z","cmd":"goto","args":"http://localhost:5174/","origin":"http://localhost:5174/","durationMs":2487,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-06-02T09:31:29.282Z","cmd":"screenshot","args":"/tmp/highfi-main.png","origin":"http://localhost:5174/","durationMs":814,"status":"ok","hasCookies":false,"mode":"launched"}
