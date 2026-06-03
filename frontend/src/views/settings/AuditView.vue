@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { auditApi } from '@/services/business'
 import type { AuditLogRow } from '@/types'
@@ -32,6 +32,10 @@ const objectTypes = [
 
 /* 展开行：显示变更前后 JSON */
 const expandRow = ref<number | null>(null)
+const expandDialogVisible = computed({
+  get: () => expandRow.value !== null,
+  set: (v: boolean) => { if (!v) expandRow.value = null }
+})
 function toggleExpand(id: number) {
   expandRow.value = expandRow.value === id ? null : id
 }
@@ -125,7 +129,7 @@ onMounted(load)
       </el-table>
 
       <!-- 展开的变更详情 -->
-      <el-dialog v-model="!!expandRow" title="变更详情" width="680px" @close="expandRow = null">
+      <el-dialog v-model="expandDialogVisible" title="变更详情" width="680px" @close="expandRow = null">
         <template v-if="expandRow">
           <div v-for="row in rows.filter(r => r.id === expandRow)" :key="row.id" style="display:flex;gap:16px;">
             <div style="flex:1">

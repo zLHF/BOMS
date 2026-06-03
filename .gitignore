@@ -29,3 +29,4 @@ Thumbs.db
 # Prototypes (reference only, not dev targets)
 business-opportunity-highfi-vue3/node_modules/
 business-opportunity-prototype/node_modules/
+.gstack/
