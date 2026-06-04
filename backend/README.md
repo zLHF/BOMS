@@ -199,6 +199,12 @@ mvn test -pl boms-web                              # 运行测试
 | GET | `/api/cpn/sso?code=xxx` | SSO 登录（code换token） |
 | GET | `{gateway}/api/extra/v1/application/heartbeat` | 心跳上报（BOMS每5分钟，HMAC-SHA256签名） |
 
+#### 配置
+
+算力对接默认关闭。配置项定义在 `CpnConfig`（前缀 `boms.cpn`，含 `enabled`/`gateway`/`app-key`/`app-secret`/`heartbeat-cron`）；环境变量完整清单见根目录 `.env.example`，部署与开启步骤见根目录 `DEPLOYMENT.md` 第 2 节。
+
+> 生产环境用环境变量注入 `app-secret`，勿写入仓库。
+
 ## 模块结构（boms-service）
 
 ```

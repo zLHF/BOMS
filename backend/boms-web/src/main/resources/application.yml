@@ -49,6 +49,15 @@ boms:
   import:
     max-file-size-bytes: ${BOMS_IMPORT_MAX_FILE_SIZE_BYTES:10485760}
 
+  # 算力平台对接（默认关闭；enabled=true 才启用 SSO/心跳，并开启每 5 分钟心跳定时任务）
+  # gateway/app-key/app-secret 由算力平台分配，生产用环境变量注入，勿入库
+  cpn:
+    enabled: ${BOMS_CPN_ENABLED:false}
+    gateway: ${BOMS_CPN_GATEWAY:}
+    app-key: ${BOMS_CPN_APP_KEY:}
+    app-secret: ${BOMS_CPN_APP_SECRET:}
+    heartbeat-cron: ${BOMS_CPN_HEARTBEAT_CRON:0 */5 * * * ?}
+
 logging:
   level:
     com.boms: ${LOGGING_LEVEL_COM_BOMS:INFO}
