@@ -1,5 +1,5 @@
 import http from './request'
-import type { Page, CustomerRow, ContactRow, OpportunityRow, StageRow, FollowRow, AuditLogRow, TaskRow, NumberRuleRow, OpportunityDetailVO, CollaboratorRow } from '@/types'
+import type { Page, CustomerRow, ContactRow, OpportunityRow, StageRow, FollowRow, AuditLogRow, TaskRow, NumberRuleRow, OpportunityDetailVO, CollaboratorRow, PoolConfigRow, FollowListRow, ImportProgressResp } from '@/types'
 
 const get = <T>(url: string, params?: object) => http.get(url, { params }) as unknown as Promise<T>
 const post = <T>(url: string, body?: object) => http.post(url, body) as unknown as Promise<T>
@@ -36,6 +36,10 @@ export const oppApi = {
   collaborators: (id: number) => get<CollaboratorRow[]>(`/opportunities/${id}/collaborators`),
   addCollaborator: (id: number, body: object) => post<CollaboratorRow>(`/opportunities/${id}/collaborators`, body),
   removeCollaborator: (id: number, cid: number) => del<void>(`/opportunities/${id}/collaborators/${cid}`),
+  /* 批量导入 */
+  importTemplate: () => '/opportunities/import/template',
+  startImport: (formData: FormData) => http.post('/opportunities/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } }) as unknown as Promise<ImportProgressResp>,
+  importProgress: (taskId: number) => get<ImportProgressResp>(`/opportunities/import/${taskId}`),
 }
 
 export const configApi = {
@@ -67,4 +71,16 @@ export const poolApi = {
   claimCustomer: (id: number) => post<void>(`/pool/customers/${id}/claim`),
   recycleOpportunity: (id: number, reason: string) => post<void>(`/pool/opportunities/${id}/recycle`, { reason }),
   recycleCustomer: (id: number, reason: string) => post<void>(`/pool/customers/${id}/recycle`, { reason }),
+}
+
+/* ---------- 公海池配置 ---------- */
+export const poolConfigApi = {
+  get: () => get<PoolConfigRow>('/pool/config'),
+  update: (body: object) => put<void>('/pool/config', body),
+  execute: () => post<string>('/pool/config/execute'),
+}
+
+/* ---------- 跟进记录独立页 ---------- */
+export const followsApi = {
+  list: (params: object) => get<Page<FollowListRow>>('/follows', params),
 }

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { oppApi, configApi, auditApi, taskApi } from '@/services/business'
 import { userApi } from '@/services/system'
+import AttachmentPanel from '@/components/AttachmentPanel.vue'
 import type { OpportunityDetailVO, StageRow, ContactRow, FollowRow, CollaboratorRow, AuditLogRow, TaskRow, UserRow } from '@/types'
 
 const route = useRoute()
@@ -411,12 +412,22 @@ onMounted(() => { loadBase(); loadUsers() })
             </el-dialog>
           </el-tab-pane>
 
-          <!-- Tab 6: 附件（占位） -->
-          <el-tab-pane label="附件" name="attachments">
-            <el-empty description="附件上传功能将在后续版本中上线（M16 MinIO 集成）" />
+          <!-- Tab 6: 报价（V1.1 占位） -->
+          <el-tab-pane label="报价" name="quote">
+            <el-empty description="报价功能将于 V1.1 上线，敬请期待" />
           </el-tab-pane>
 
-          <!-- Tab 7: 操作日志 -->
+          <!-- Tab 7: 订单（V1.1 占位） -->
+          <el-tab-pane label="订单" name="order">
+            <el-empty description="订单功能将于 V1.1 上线，敬请期待" />
+          </el-tab-pane>
+
+          <!-- Tab 8: 附件 -->
+          <el-tab-pane label="附件" name="attachments">
+            <AttachmentPanel v-if="activeTab === 'attachments'" object-type="opportunity" :object-id="oppId" />
+          </el-tab-pane>
+
+          <!-- Tab 9: 操作日志 -->
           <el-tab-pane label="操作日志" name="logs">
             <el-table :data="auditLogs" stripe>
               <el-table-column prop="userName" label="操作人" width="100" />

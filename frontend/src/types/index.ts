@@ -149,6 +149,20 @@ export interface FollowRow {
   createdAt: string
 }
 
+/** 跟进列表独立页行类型（含富化字段）。 */
+export interface FollowListRow {
+  id: number
+  opportunityId: number
+  opportunityTitle: string
+  followType?: string
+  content?: string
+  result?: string
+  nextTime?: string
+  creatorId?: number
+  creatorName?: string
+  createdAt: string
+}
+
 export interface AuditLogRow {
   id: number
   userId?: number
@@ -200,4 +214,62 @@ export interface CollaboratorRow {
   userId: number
   permissionJson?: string
   status: string
+}
+
+/** 附件行类型。 */
+export interface AttachmentRow {
+  id: number
+  fileName: string
+  fileSize: number
+  contentType: string
+  objectType: string
+  objectId: number
+  status: string
+  uploaderId: number
+  createdAt: string
+}
+
+/** 签名上传请求。 */
+export interface SignUploadReq {
+  fileName: string
+  contentType: string
+  objectType: string
+  objectId: number
+  fileSize: number
+}
+
+/** 签名上传响应。 */
+export interface SignUploadResp {
+  attachmentId: number
+  uploadUrl: string
+  headers: Record<string, string>
+}
+
+/** 公海池配置。 */
+export interface PoolConfigRow {
+  id: number
+  autoRecycleEnabled: number
+  noFollowDays: number
+  protectionDays: number
+  personalLimit: number
+}
+
+/** 数据字典项。 */
+export interface DictRow {
+  id: number
+  tenantId: number
+  dictType: string
+  itemCode: string
+  itemLabel: string
+  sort: number
+  isActive: number
+}
+
+/** 导入进度响应。 */
+export interface ImportProgressResp {
+  taskId: number
+  status: string
+  total: number
+  success: number
+  failed: number
 }

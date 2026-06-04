@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { oppApi, customerApi, configApi, poolApi } from '@/services/business'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import ImportDialog from '@/components/ImportDialog.vue'
 import type { OpportunityRow, CustomerRow, StageRow, FollowRow } from '@/types'
 
 const auth = useAuthStore()
@@ -13,6 +14,7 @@ const total = ref(0)
 const loading = ref(false)
 const stages = ref<StageRow[]>([])
 const customers = ref<CustomerRow[]>([])
+const importRef = ref<InstanceType<typeof ImportDialog> | null>(null)
 
 const query = reactive({ view: 'all', keyword: '', stageId: undefined as number | undefined, page: 1, size: 20 })
 
@@ -144,6 +146,7 @@ onMounted(() => { loadMeta(); load() })
         <p>多视图列表 + 阶段流转（M05/M06/M07）。列表按数据范围过滤，阶段链/成交规则见 D1。</p>
       </div>
       <div class="head-actions">
+        <el-button v-perm="'opp:import'" @click="importRef?.open()">批量导入</el-button>
         <el-button v-perm="'opp:create'" type="primary" @click="openCreate">新增商机</el-button>
       </div>
     </div>
@@ -258,5 +261,8 @@ onMounted(() => { loadMeta(); load() })
         </div>
       </template>
     </el-drawer>
+
+    <!-- 批量导入对话框 -->
+    <ImportDialog ref="importRef" @done="load" />
   </div>
 </template>

@@ -23,3 +23,8 @@ export function apiChangePassword(oldPassword: string, newPassword: string): Pro
 export function apiLogout(): Promise<void> {
   return http.post('/auth/logout') as unknown as Promise<void>
 }
+
+/** 算力平台 SSO 登录（用 code 换 BOMS token）。 */
+export function apiSso(code: string): Promise<LoginResult> {
+  return http.get('/cpn/sso', { params: { code } }) as unknown as Promise<LoginResult>
+}

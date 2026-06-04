@@ -1,5 +1,5 @@
 import http from './request'
-import type { Page, TenantRow, SysPackageRow, DeptNode, UserRow, RoleRow, PermissionRow } from '@/types'
+import type { Page, TenantRow, SysPackageRow, DeptNode, UserRow, RoleRow, PermissionRow, DictRow } from '@/types'
 
 const get = <T>(url: string, params?: object) => http.get(url, { params }) as unknown as Promise<T>
 const post = <T>(url: string, body?: object) => http.post(url, body) as unknown as Promise<T>
@@ -45,4 +45,14 @@ export const roleApi = {
   remove: (id: number) => del<void>(`/roles/${id}`),
   assignPerms: (id: number, permissionIds: number[], dataScope: string) =>
     put<void>(`/roles/${id}/permissions`, { permissionIds, dataScope }),
+}
+
+/* ---------- M19 数据字典 ---------- */
+export const dictApi = {
+  listByType: (dictType: string) => get<DictRow[]>(`/dicts/${dictType}`),
+  listTypes: () => get<string[]>('/dicts/types'),
+  listPage: (params: object) => get<Page<DictRow>>('/dicts', params),
+  create: (body: object) => post<DictRow>('/dicts', body),
+  update: (id: number, body: object) => put<void>(`/dicts/${id}`, body),
+  remove: (id: number) => del<void>(`/dicts/${id}`),
 }

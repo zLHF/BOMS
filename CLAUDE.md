@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **商机管理系统（BOMS）**，多租户、多用户、多组织的 B2B 销售协同平台，基于 `商机管理系统_PRD_多用户多租户版.md` 与 `docs/` 设计文档实现。
 
-**当前状态：V1.0 Sprint 4 已完成**。平台底座（M01–M04）+ 客户/商机主体（M05/M06/M07/M10）+ 任务中心/详情多Tab/协作/公海/审计/配置（M08/M09/M12/D5/M16/M19）均已落地。
+**当前状态：V1.0 全部完成**。功能开发 + 算力平台对接 + 批量导入 + CI/CD + 后端多模块拆分均已落地。
 
 ## 目录结构
 
@@ -29,7 +29,9 @@ cd deploy && docker compose up -d
 
 # 2) 后端（本机 Maven 默认 JDK17，必须指向 21，否则报 "release version 21 not supported"）
 cd backend && export JAVA_HOME=$(/usr/libexec/java_home -v 21)
-mvn -DskipTests spring-boot:run          # 首次启动 Flyway 自动建表+初始化；服务在 :8081
+mvn -DskipTests spring-boot:run -pl boms-web  # 多模块，启动 boms-web；首次启动 Flyway 自动建表+初始化；服务在 :8081
+mvn compile                                   # 编译全部子模块
+mvn test -pl boms-web                         # 运行测试
 
 # 3) 前端（/api 经 vite 代理到 8081）
 cd frontend && npm install
@@ -40,14 +42,14 @@ npm run build
 
 ## 架构概览
 
-### 后端（`com.boms`，单模块清晰分包）
+### 后端（`com.boms`，三层 Maven 多模块）
 
 - **统一响应/异常**：`common/result/R`、`common/exception/GlobalExceptionHandler`（401/403 映射 HTTP 状态）。
 - **多租户隔离**：`JwtAuthFilter` 解析 token → 经 `PrincipalLoader` 加载权限/角色/数据范围/部门 → 写入 `TenantContext`(ThreadLocal)，请求结束清理。`BomsTenantHandler` + MyBatis-Plus `TenantLineInnerInterceptor` 对业务表自动追加 `tenant_id`（平台表与 tenant_id=0 跳过）。**tenant_id 永远以 token 为准，前端不可信传入**。
 - **鉴权**：`@RequirePerm("码")` AOP（缺登录态→401，缺权限码→403）。`@AuditLog` AOP 落 `audit_log`。
 - **数据范围(ABAC)**：`DataScope`(SELF/DEPT/DEPT_AND_SUB/TENANT/PLATFORM) + `ScopeService.apply(wrapper, ownerCol, deptCol)`，多角色取最宽，对 view 查询追加过滤。
 - **迁移**：`docs/09`→`backend/.../db/migration/V1__schema.sql`，`docs/10`→`V2__seed.sql`，Flyway 启动时建 21 表 + 种子。
-- **模块**：`modules/auth`(登录/me/改密)、`modules/system`(租户/部门/用户/角色/权限)、`modules/customer`、`modules/opportunity`(商机+阶段+跟进+协作+配置)、`modules/task`(任务中心)、`modules/audit`(审计日志查询)、`modules/pool`(公海池)。
+- **模块**：`modules/auth`(登录/me/改密)、`modules/system`(租户/部门/用户/角色/权限/字典)、`modules/customer`、`modules/opportunity`(商机+阶段+跟进+协作+配置)、`modules/task`(任务中心)、`modules/audit`(审计日志查询)、`modules/pool`(公海池+自动回收)、`modules/file`(附件中心/MinIO)、`modules/cpn`(算力平台对接:用户开通/SSO/心跳)、`modules/importer`(批量导入:EasyExcel+异步任务)。
 
 ### 前端（`frontend/src`，按 02 架构 §8）
 
@@ -55,7 +57,7 @@ npm run build
 - `router/`（路由表带 `perm`/`group` meta + 登录/权限守卫）、`stores/auth.ts`、`services/`（axios 拦截器注入 token、解包 `R<T>`、401 跳登录）、`directives/perm.ts`（无权限从 DOM 移除）。
 - `layouts/DefaultLayout.vue`：侧边栏菜单按用户 `menu:*` 权限码过滤分组渲染。
 - `styles/tokens.css`（设计 token，主色 `#2563eb`）+ `base.css`（来自高保真）。
-- `views/`：登录、工作台、客户（含公海）、商机（含详情多Tab 7标签页+公海）、任务中心、设置(组织用户/角色权限/阶段编号配置/操作日志)、平台(租户管理)。
+- `views/`：登录、工作台、客户（含公海）、商机（含详情多Tab 9标签页+公海）、任务中心、跟进记录(独立页)、设置(组织用户/角色权限/阶段编号配置/操作日志/公海配置/数据字典)、平台(租户管理)。
 
 ### 数据库
 
@@ -70,8 +72,11 @@ npm run build
 | V1.0 Sprint 1 | M01 认证 / M02 租户(创建即引导角色矩阵+管理员+阶段) / M03 组织用户 / M04 角色权限 | M1：两租户、角色受限、跨租户拒绝+审计 |
 | V1.0 Sprint 2–3 | M10 客户(+联系人/D2唯一性) / M05 商机多视图 / M06 新增编辑 / M07 阶段流转(D1)+跟进 | M2：客户商机可建可查、多视图、数据按角色受限、跨租户隔离 |
 | V1.0 Sprint 4 | M16 审计日志查看 / M19 阶段编号配置 / M12 任务中心 / M08 商机详情多Tab(7标签) / M09 协作 / D5 公海池 | M3：任务CRUD+数据范围、商机详情7Tab、协作人管理、手动公海回收/认领、审计日志查询、阶段/编号配置 |
+| V1.0 Sprint 5 | M16 附件中心(MinIO签名上传/下载) / D5 自动回收定时任务 / 跟进记录独立页 / 数据字典配置 / 报价订单占位Tab | M4：附件上传下载、30天无跟进自动回收、跟进全局时间线/列表、字典CRUD、商机详情9Tab |
+| V1.0 Sprint 6 | 算力平台对接(用户开通+SSO+心跳4接口) / M06 批量导入(EasyExcel+异步) | M5：`/open-api/app/tenants`开通、`/api/cpn/sso`登录、5分钟心跳、Excel导入商机 |
+| V1.0 Sprint 7 | 后端三层Maven多模块拆分(boms-common/boms-service/boms-web) / GitHub Actions CI / Dockerfile / 自动化测试 | M6：CI流水线(编译+测试+类型检查+构建+Docker镜像)、JwtUtil/R/BizException单元测试 |
 
-**待办**：M06 批量导入、M16 附件中心(MinIO文件上传)、自动回收定时任务(公海)、报价/订单占位、跟进记录独立页、数据字典配置、CI、后端多模块拆分。
+**待办**：无。V1.0 全部完成。
 
 ## 关键约定与易踩坑
 
@@ -98,14 +103,23 @@ npm run build
 - 用户：`GET/POST /api/users` `PUT /api/users/{id}` `PATCH /api/users/{id}/disable` `POST /api/users/{id}/reset-password` `PUT /api/users/{id}/roles`
 - 角色：`GET/POST /api/roles` `PUT/DELETE /api/roles/{id}` `PUT /api/roles/{id}/permissions`
 - 部门：`GET/POST /api/depts` `PUT/DELETE /api/depts/{id}`
+- 字典：`GET /api/dicts` `GET /api/dicts/types` `GET /api/dicts/{dictType}` `POST /api/dicts` `PUT/DELETE /api/dicts/{id}`
 
 ### 业务
 - 客户：`GET/POST /api/customers` `PUT/DELETE /api/customers/{id}` `GET/POST /api/customers/{id}/contacts`
 - 商机：`GET/POST /api/opportunities` `GET /api/opportunities/{id}` `GET /api/opportunities/{id}/detail`(富化) `PUT/DELETE /api/opportunities/{id}` `POST /{id}/stage` `POST /{id}/stage/rollback` `POST /{id}/win` `POST /{id}/lose` `POST /{id}/transfer` `GET/POST /{id}/follows` `GET /{id}/contacts` `GET/POST /{id}/collaborators` `DELETE /{id}/collaborators/{cid}`
+- 跟进：`GET /api/follows`(全局分页+富化)
 - 任务：`GET/POST /api/tasks` `PUT /api/tasks/{id}` `POST /api/tasks/{id}/assign` `POST /api/tasks/{id}/cancel` `POST /api/tasks/{id}/status`
 - 配置：`GET /api/config/stages` `PUT /api/config/stages/{id}` `GET/PUT /api/config/number-rules`
 - 审计：`GET /api/audit-logs`
-- 公海：`GET /api/pool/opportunities` `GET /api/pool/customers` `POST /api/pool/opportunities/{id}/claim` `POST /api/pool/opportunities/{id}/recycle` `POST /api/pool/customers/{id}/claim` `POST /api/pool/customers/{id}/recycle`
+- 附件：`POST /api/files/sign-upload` `POST /api/files`(确认) `GET /api/files/{id}/sign-download` `DELETE /api/files/{id}` `GET /api/files`(按对象查询)
+- 公海：`GET /api/pool/opportunities` `GET /api/pool/customers` `POST /api/pool/opportunities/{id}/claim` `POST /api/pool/opportunities/{id}/recycle` `POST /api/pool/customers/{id}/claim` `POST /api/pool/customers/{id}/recycle` `GET/PUT /api/pool/config` `POST /api/pool/config/execute`(手动触发回收)
+- 导入：`GET /api/opportunities/import/template`(下载模板) `POST /api/opportunities/import`(上传Excel) `GET /api/opportunities/import/{taskId}`(进度)
+
+### 算力平台对接
+- 开通：`POST /open-api/app/tenants`（平台调BOMS，appKey+appSecret鉴权，自动创建租户+用户+返回token）
+- SSO：`GET /api/cpn/sso?code=xxx`（前端用code换BOMS token，内部调平台身份校验+用户信息接口）
+- 心跳：`GET {gateway}/api/extra/v1/application/heartbeat`（BOMS每5分钟上报，HMAC-SHA256签名认证）
 
 ## 文档导航
 

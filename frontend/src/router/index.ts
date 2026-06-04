@@ -63,7 +63,7 @@ export const routes: RouteRecordRaw[] = [
       {
         path: 'follow',
         name: 'follow',
-        component: () => import('@/views/PlaceholderView.vue'),
+        component: () => import('@/views/FollowView.vue'),
         meta: { title: '跟进记录', perm: 'menu:follow', group: '业务', icon: 'ChatLineSquare' },
       },
       {
@@ -89,6 +89,18 @@ export const routes: RouteRecordRaw[] = [
         name: 'settings-audit',
         component: () => import('@/views/settings/AuditView.vue'),
         meta: { title: '操作日志', perm: 'menu:settings:audit', group: '设置', icon: 'Document' },
+      },
+      {
+        path: 'settings/pool',
+        name: 'settings-pool',
+        component: () => import('@/views/settings/PoolConfigView.vue'),
+        meta: { title: '公海配置', perm: 'menu:settings:pool', group: '设置', icon: 'Box' },
+      },
+      {
+        path: 'settings/dict',
+        name: 'settings-dict',
+        component: () => import('@/views/settings/DictConfigView.vue'),
+        meta: { title: '数据字典', perm: 'menu:settings:dict', group: '设置', icon: 'Collection' },
       },
       {
         path: 'platform/tenant',

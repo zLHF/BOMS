@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
+import { apiSso } from '@/services/auth'
+import { setToken } from '@/services/request'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -34,6 +36,32 @@ async function onSubmit() {
     loading.value = false
   }
 }
+
+/** 算力平台 SSO：URL 带 ?code=xxx 时自动登录 */
+async function trySso() {
+  const code = route.query.code as string
+  if (!code) return
+  loading.value = true
+  try {
+    const res = await apiSso(code)
+    // SSO 返回格式与 LoginResult 一致，直接设置 store
+    setToken(res.token)
+    auth.token = res.token
+    auth.userId = res.userId
+    auth.tenantId = res.tenantId
+    auth.username = res.username
+    auth.realName = res.realName
+    auth.permissions = res.permissions
+    ElMessage.success('SSO 登录成功')
+    router.push('/dashboard')
+  } catch (e: unknown) {
+    ElMessage.error((e as Error).message || 'SSO 登录失败，请使用账号密码登录')
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(trySso)
 </script>
 
 <template>
