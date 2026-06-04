@@ -38,6 +38,13 @@ boms:
     allow-plain-password: true
     plain-password: "123456"
 
+  # MinIO 附件存储
+  minio:
+    endpoint: http://127.0.0.1:9100
+    access-key: boms
+    secret-key: boms_minio_pw
+    bucket: boms-files
+
 logging:
   level:
     com.boms: debug
