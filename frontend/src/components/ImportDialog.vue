@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { oppApi } from '@/services/business'
+import { getToken } from '@/services/request'
 import type { ImportProgressResp } from '@/types'
 
 const emit = defineEmits<{ done: [] }>()
@@ -24,16 +25,22 @@ function open() {
 }
 
 function downloadTemplate() {
-  const link = document.createElement('a')
-  link.href = '/api/opportunities/import/template'
-  link.download = '商机导入模板.xlsx'
-  // 需要带 token
-  const token = localStorage.getItem('token')
+  const token = getToken()
+  if (!token) {
+    ElMessage.warning('请先登录后再下载模板')
+    return
+  }
+
   fetch('/api/opportunities/import/template', {
     headers: { Authorization: `Bearer ${token}` },
-  }).then(r => r.blob()).then(blob => {
+  }).then(async r => {
+    if (!r.ok) throw new Error(await r.text())
+    return r.blob()
+  }).then(blob => {
+    const link = document.createElement('a')
     const url = URL.createObjectURL(blob)
     link.href = url
+    link.download = '商机导入模板.xlsx'
     link.click()
     URL.revokeObjectURL(url)
   }).catch(() => ElMessage.error('下载模板失败'))

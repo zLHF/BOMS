@@ -1,13 +1,13 @@
 server:
-  port: 8081   # 8080 已被 yunqian-backend 占用
+  port: ${SERVER_PORT:8081}
 
 spring:
   application:
     name: boms-backend
   datasource:
-    url: jdbc:mysql://127.0.0.1:3307/boms?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
-    username: boms
-    password: boms_pw
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://127.0.0.1:3307/boms?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${SPRING_DATASOURCE_USERNAME:boms}
+    password: ${SPRING_DATASOURCE_PASSWORD:boms_pw}
     driver-class-name: com.mysql.cj.jdbc.Driver
   flyway:
     enabled: true
@@ -31,20 +31,24 @@ mybatis-plus:
 boms:
   jwt:
     # 演示密钥；生产用环境变量注入，勿入库
-    secret: "boms-phase0-demo-secret-key-change-me-in-prod-0123456789"
-    expire-minutes: 720
+    secret: ${BOMS_JWT_SECRET:boms-phase0-demo-secret-key-change-me-in-prod-0123456789}
+    expire-minutes: ${BOMS_JWT_EXPIRE_MINUTES:720}
   demo:
     # 演示账号种子里 password_hash 为占位，阶段 0 放行明文 123456 登录；接入真实 bcrypt 后置 false
-    allow-plain-password: true
-    plain-password: "123456"
+    allow-plain-password: ${BOMS_DEMO_ALLOW_PLAIN_PASSWORD:true}
+    plain-password: ${BOMS_DEMO_PLAIN_PASSWORD:123456}
 
   # MinIO 附件存储
   minio:
-    endpoint: http://127.0.0.1:9100
-    access-key: boms
-    secret-key: boms_minio_pw
-    bucket: boms-files
+    endpoint: ${BOMS_MINIO_ENDPOINT:http://127.0.0.1:9100}
+    access-key: ${BOMS_MINIO_ACCESS_KEY:boms}
+    secret-key: ${BOMS_MINIO_SECRET_KEY:boms_minio_pw}
+    bucket: ${BOMS_MINIO_BUCKET:boms-files}
+
+  # 批量导入限制，默认 10MiB，生产可按网关/业务容量调整
+  import:
+    max-file-size-bytes: ${BOMS_IMPORT_MAX_FILE_SIZE_BYTES:10485760}
 
 logging:
   level:
-    com.boms: debug
+    com.boms: ${LOGGING_LEVEL_COM_BOMS:INFO}

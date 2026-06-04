@@ -11,11 +11,13 @@ import com.boms.modules.opportunity.mapper.OpportunityMapper;
 import com.boms.modules.opportunity.mapper.OpportunityStageMapper;
 import com.boms.modules.system.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CompletableFuture;
 
 /** 导入服务。 */
 @Slf4j
@@ -39,7 +41,7 @@ public class ImportService {
     }
 
     /** 创建导入任务并异步执行。 */
-    public Long startImport(MultipartFile file) {
+    public Long startImport(MultipartFile file) throws IOException {
         Long tid = TenantContext.tenantId();
         Long userId = TenantContext.userId();
 
@@ -54,13 +56,14 @@ public class ImportService {
         task.setOperatorId(userId);
         taskMapper.insert(task);
 
-        asyncExecute(task, file);
+        byte[] content = file.getBytes();
+        CompletableFuture.runAsync(() -> executeImport(task, content));
         return task.getId();
     }
 
-    @Async
-    protected void asyncExecute(ImportTask task, MultipartFile file) {
-        try (InputStream is = file.getInputStream()) {
+    private void executeImport(ImportTask task, byte[] content) {
+        TenantContext.set(new TenantContext.Principal(task.getTenantId(), task.getOperatorId(), "importer"));
+        try (InputStream is = new ByteArrayInputStream(content)) {
             OpportunityImportListener listener = new OpportunityImportListener(
                     task, taskMapper, oppMapper, customerMapper, stageMapper, userMapper);
             EasyExcel.read(is, OpportunityExcelRow.class, listener).sheet().doRead();
@@ -68,6 +71,8 @@ public class ImportService {
             task.setStatus("FAILED");
             taskMapper.updateById(task);
             log.error("[Import] 导入失败 taskId={}: {}", task.getId(), e.getMessage(), e);
+        } finally {
+            TenantContext.clear();
         }
     }
 

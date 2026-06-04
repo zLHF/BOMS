@@ -9,17 +9,17 @@ services:
       - --collation-server=utf8mb4_0900_ai_ci
       - --default-time-zone=+08:00
     environment:
-      MYSQL_ROOT_PASSWORD: boms_root_pw
-      MYSQL_DATABASE: boms
-      MYSQL_USER: boms
-      MYSQL_PASSWORD: boms_pw
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-boms_root_pw}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-boms}
+      MYSQL_USER: ${MYSQL_USER:-boms}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-boms_pw}
       TZ: Asia/Shanghai
     ports:
       - "3307:3306"
     volumes:
       - boms_mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pboms_root_pw"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -38,8 +38,8 @@ services:
     container_name: boms-minio
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: boms
-      MINIO_ROOT_PASSWORD: boms_minio_pw
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-boms}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-boms_minio_pw}
     ports:
       - "9100:9000"   # S3 API
       - "9101:9001"   # 控制台
