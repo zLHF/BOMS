@@ -243,7 +243,7 @@ docker build -t boms-frontend .
 
 - **GitHub Actions**：编译 → 测试 → 前端 typecheck → 构建 → Docker 镜像
 - **Dockerfile**：后端多阶段构建（Maven → JDK 21 JRE）、前端多阶段构建（Node → Nginx）
-- **上线前检查**：发布前按 `PRE_LAUNCH_CHECKLIST.md` 完成代码、测试、数据库、环境变量、安全、性能和回滚确认。
+- **上线前检查**：发布前按 `DEPLOYMENT.md` 第 9 节「上线前检查清单」完成代码、测试、数据库、环境变量、安全、性能和回滚确认。
 
 ## 数据库
 
@@ -260,7 +260,7 @@ docker build -t boms-frontend .
 1. 本地开发或部署前，先复制并检查 `.env.example`。
 2. 部署到服务器或容器平台时，按 `DEPLOYMENT.md` 准备环境、数据库和对象存储。
 3. 提测、发布前，按 `TESTING.md` 执行自动化检查和核心业务冒烟。
-4. 正式上线前，逐项核对 `PRE_LAUNCH_CHECKLIST.md`。
+4. 正式上线前，逐项核对 `DEPLOYMENT.md` 第 9 节「上线前检查清单」。
 5. 排查本次交付变更范围时，查看 `CHANGELOG.md`。
 
 | 文档 | 使用场景 | 说明 |
@@ -268,7 +268,6 @@ docker build -t boms-frontend .
 | `.env.example` | 环境准备 | 环境变量样例，不包含真实密钥；生产必须替换所有 `change-me` 占位 |
 | `DEPLOYMENT.md` | 部署/运维 | 部署步骤、服务器要求、数据库初始化、生产注意事项、常见问题 |
 | `TESTING.md` | 测试/验收 | 测试方法、测试命令、覆盖范围和核心业务冒烟建议 |
-| `PRE_LAUNCH_CHECKLIST.md` | 上线评审 | 代码、测试、数据库、环境变量、安全、性能、回滚和上线后验证清单 |
 | `CHANGELOG.md` | 变更追踪 | 本次交付前检查与补强记录 |
 
 ## 设计文档
