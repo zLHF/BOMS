@@ -2,7 +2,8 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 COPY . .
-RUN --mount=type=cache,target=/root/.m2 ./mvnw package -DskipTests -q 2>/dev/null || mvn package -DskipTests -q
+RUN sed -i 's/\r$//' mvnw && chmod +x mvnw
+RUN --mount=type=cache,target=/root/.m2 ./mvnw package -DskipTests -q
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
