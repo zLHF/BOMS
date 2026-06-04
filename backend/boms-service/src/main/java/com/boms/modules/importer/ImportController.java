@@ -8,6 +8,7 @@ import com.boms.modules.importer.dto.ImportProgressResp;
 import com.boms.modules.importer.dto.OpportunityExcelRow;
 import com.boms.modules.importer.entity.ImportTask;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,9 @@ import java.nio.charset.StandardCharsets;
 public class ImportController {
 
     private final ImportService importService;
+
+    @Value("${boms.import.max-file-size-bytes:10485760}")
+    private long maxFileSizeBytes;
 
     public ImportController(ImportService importService) {
         this.importService = importService;
@@ -41,9 +45,7 @@ public class ImportController {
     @RequirePerm("opp:import")
     @AuditLog(action = "opp:import", objectType = "opportunity")
     public R<ImportProgressResp> startImport(@RequestParam("file") MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
-            return R.fail(40001, "请选择要导入的文件");
-        }
+        ImportFileValidator.validate(file.getOriginalFilename(), file.getSize(), maxFileSizeBytes);
         Long taskId = importService.startImport(file);
         return R.ok(new ImportProgressResp(taskId, "RUNNING", 0, 0, 0));
     }

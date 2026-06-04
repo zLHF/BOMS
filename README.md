@@ -45,11 +45,12 @@ BOMS/
 
 ## 快速开始（本地开发）
 
-### 1. 启动基础设施
+### 1. 准备环境变量并启动基础设施
 
 ```bash
+cp .env.example .env   # 本地开发可使用默认示例；生产必须替换所有 change-me 值
 cd deploy
-docker compose up -d
+docker compose --env-file ../.env up -d
 ```
 
 将启动三个服务：
@@ -182,10 +183,18 @@ docker build -t boms-frontend .
 | `BOMS_JWT_SECRET` | JWT 签名密钥 | 演示密钥（**生产必须更换**） |
 | `BOMS_JWT_EXPIRE_MINUTES` | Token 有效期（分钟） | `720` |
 | `BOMS_DEMO_ALLOW_PLAIN_PASSWORD` | 是否允许明文密码登录 | `true`（**生产必须设为 false**） |
-| `MINIO_ROOT_USER` | MinIO 用户 | `boms` |
-| `MINIO_ROOT_PASSWORD` | MinIO 密码 | `boms_minio_pw` |
+| `BOMS_MINIO_ENDPOINT` | MinIO/S3 API 地址 | `http://127.0.0.1:9100` |
+| `BOMS_MINIO_ACCESS_KEY` | 后端访问 MinIO 的 Access Key | `boms` |
+| `BOMS_MINIO_SECRET_KEY` | 后端访问 MinIO 的 Secret Key | `boms_minio_pw` |
+| `BOMS_MINIO_BUCKET` | 附件 bucket | `boms-files` |
+| `BOMS_IMPORT_MAX_FILE_SIZE_BYTES` | 批量导入文件大小上限 | `10485760` |
+| `LOGGING_LEVEL_COM_BOMS` | 后端业务日志级别 | `INFO` |
+| `MINIO_ROOT_USER` | MinIO 管理员用户 | `boms` |
+| `MINIO_ROOT_PASSWORD` | MinIO 管理员密码 | `boms_minio_pw` |
 
-> **⚠️ 安全提醒**：生产部署时务必修改 JWT 密钥、数据库密码、MinIO 密码，并关闭 `BOMS_DEMO_ALLOW_PLAIN_PASSWORD`。
+完整变量清单见 `.env.example`。
+
+> **⚠️ 安全提醒**：生产部署时务必修改 JWT 密钥、数据库密码、MinIO 密码，并关闭 `BOMS_DEMO_ALLOW_PLAIN_PASSWORD`。演示账号依赖明文口令放行，仅允许在本地或演示环境使用。
 
 ### MinIO 初始化
 
@@ -234,6 +243,7 @@ docker build -t boms-frontend .
 
 - **GitHub Actions**：编译 → 测试 → 前端 typecheck → 构建 → Docker 镜像
 - **Dockerfile**：后端多阶段构建（Maven → JDK 21 JRE）、前端多阶段构建（Node → Nginx）
+- **上线前检查**：发布前按 `PRE_LAUNCH_CHECKLIST.md` 完成代码、测试、数据库、环境变量、安全、性能和回滚确认。
 
 ## 数据库
 
@@ -241,7 +251,17 @@ docker build -t boms-frontend .
 - 公共字段：`tenant_id / created_by / created_at / updated_by / updated_at / deleted`
 - 逻辑删除（`@TableLogic`）、乐观锁（`@Version`）、金额 `DECIMAL(15,2)`
 
-## 文档
+## 交付与运维文档
+
+| 文档 | 说明 |
+|------|------|
+| `.env.example` | 环境变量样例，不包含真实密钥 |
+| `DEPLOYMENT.md` | 部署步骤、服务器要求、数据库初始化、常见问题 |
+| `TESTING.md` | 测试方法、测试命令、覆盖范围和冒烟建议 |
+| `PRE_LAUNCH_CHECKLIST.md` | 上线前检查清单 |
+| `CHANGELOG.md` | 本次交付前检查与补强记录 |
+
+## 设计文档
 
 | 文档 | 说明 |
 |------|------|
